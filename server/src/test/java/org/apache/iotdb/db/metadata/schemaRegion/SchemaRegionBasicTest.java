@@ -223,13 +223,8 @@ public class SchemaRegionBasicTest extends AbstractSchemaRegionTest {
     Assert.assertTrue(res3.get(2) instanceof PathAlreadyExistException);
   }
 
-  /**
-   * Test {@link ISchemaRegion#constructSchemaBlackList}, {@link
-   * ISchemaRegion#rollbackSchemaBlackList}, {@link ISchemaRegion#fetchSchemaBlackList} and{@link
-   * ISchemaRegion#deleteTimeseriesInBlackList}
-   */
   @Test
-  public void testDeleteTimeseries() throws Exception {
+  public void testConstructSchemaBlackList() throws Exception {
     ISchemaRegion schemaRegion = getSchemaRegion("root.sg", 0);
     schemaRegion.createTimeseries(
         new CreateTimeSeriesPlanImpl(
@@ -280,7 +275,7 @@ public class SchemaRegionBasicTest extends AbstractSchemaRegionTest {
     patternTree.appendPathPattern(new PartialPath("root.sg.wf01.*.status"));
     patternTree.appendPathPattern(new PartialPath("root.sg.wf02.wt01.temperature"));
     patternTree.constructTree();
-    Assert.assertTrue(schemaRegion.constructSchemaBlackList(patternTree) >= 4);
+    Assert.assertTrue(schemaRegion.constructSchemaBlackList(patternTree) >= 3);
     Assert.assertEquals(
         new HashSet<>(
             Arrays.asList(

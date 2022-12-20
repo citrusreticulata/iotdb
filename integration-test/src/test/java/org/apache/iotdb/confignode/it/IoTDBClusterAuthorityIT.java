@@ -26,7 +26,7 @@ import org.apache.iotdb.confignode.rpc.thrift.IConfigNodeRPCService;
 import org.apache.iotdb.confignode.rpc.thrift.TAuthorizerReq;
 import org.apache.iotdb.confignode.rpc.thrift.TAuthorizerResp;
 import org.apache.iotdb.confignode.rpc.thrift.TCheckUserPrivilegesReq;
-import org.apache.iotdb.db.mpp.plan.statement.AuthorType;
+import org.apache.iotdb.db.qp.logical.sys.AuthorOperator;
 import org.apache.iotdb.it.env.EnvFactory;
 import org.apache.iotdb.it.framework.IoTDBTestRunner;
 import org.apache.iotdb.itbase.category.ClusterIT;
@@ -70,7 +70,7 @@ public class IoTDBClusterAuthorityIT {
     // clean user
     TAuthorizerReq authorizerReq =
         new TAuthorizerReq(
-            AuthorType.LIST_USER.ordinal(),
+            AuthorOperator.AuthorType.LIST_USER.ordinal(),
             "",
             "",
             "",
@@ -86,7 +86,7 @@ public class IoTDBClusterAuthorityIT {
       if (!user.equals("root")) {
         authorizerReq =
             new TAuthorizerReq(
-                AuthorType.DROP_USER.ordinal(),
+                AuthorOperator.AuthorType.DROP_USER.ordinal(),
                 user,
                 "",
                 "",
@@ -136,7 +136,7 @@ public class IoTDBClusterAuthorityIT {
       // create user
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.CREATE_USER.ordinal(),
+              AuthorOperator.AuthorType.CREATE_USER.ordinal(),
               "tempuser0",
               "",
               "passwd",
@@ -158,7 +158,7 @@ public class IoTDBClusterAuthorityIT {
       // drop user
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.DROP_USER.ordinal(),
+              AuthorOperator.AuthorType.DROP_USER.ordinal(),
               "tempuser1",
               "",
               "",
@@ -171,7 +171,13 @@ public class IoTDBClusterAuthorityIT {
       // list user
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_USER.ordinal(), "", "", "", "", new HashSet<>(), new ArrayList<>());
+              AuthorOperator.AuthorType.LIST_USER.ordinal(),
+              "",
+              "",
+              "",
+              "",
+              new HashSet<>(),
+              new ArrayList<>());
       authorizerResp = client.queryPermission(authorizerReq);
       status = authorizerResp.getStatus();
       assertEquals(TSStatusCode.SUCCESS_STATUS.getStatusCode(), status.getCode());
@@ -181,7 +187,7 @@ public class IoTDBClusterAuthorityIT {
       // create role
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.CREATE_ROLE.ordinal(),
+              AuthorOperator.AuthorType.CREATE_ROLE.ordinal(),
               "",
               "temprole0",
               "",
@@ -197,7 +203,7 @@ public class IoTDBClusterAuthorityIT {
       // drop role
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.DROP_ROLE.ordinal(),
+              AuthorOperator.AuthorType.DROP_ROLE.ordinal(),
               "",
               "temprole1",
               "",
@@ -210,7 +216,13 @@ public class IoTDBClusterAuthorityIT {
       // list role
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_ROLE.ordinal(), "", "", "", "", new HashSet<>(), new ArrayList<>());
+              AuthorOperator.AuthorType.LIST_ROLE.ordinal(),
+              "",
+              "",
+              "",
+              "",
+              new HashSet<>(),
+              new ArrayList<>());
       authorizerResp = client.queryPermission(authorizerReq);
       status = authorizerResp.getStatus();
       assertEquals(TSStatusCode.SUCCESS_STATUS.getStatusCode(), status.getCode());
@@ -220,7 +232,7 @@ public class IoTDBClusterAuthorityIT {
       // alter user
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.UPDATE_USER.ordinal(),
+              AuthorOperator.AuthorType.UPDATE_USER.ordinal(),
               "tempuser0",
               "",
               "",
@@ -235,7 +247,7 @@ public class IoTDBClusterAuthorityIT {
       nodeNameList.add("root.ln.**");
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.GRANT_USER.ordinal(),
+              AuthorOperator.AuthorType.GRANT_USER.ordinal(),
               "tempuser0",
               "",
               "",
@@ -254,7 +266,7 @@ public class IoTDBClusterAuthorityIT {
       // grant role
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.GRANT_ROLE.ordinal(),
+              AuthorOperator.AuthorType.GRANT_ROLE.ordinal(),
               "",
               "temprole0",
               "",
@@ -267,7 +279,7 @@ public class IoTDBClusterAuthorityIT {
       // grant role to user
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.GRANT_USER_ROLE.ordinal(),
+              AuthorOperator.AuthorType.GRANT_USER_ROLE.ordinal(),
               "tempuser0",
               "temprole0",
               "",
@@ -280,7 +292,7 @@ public class IoTDBClusterAuthorityIT {
       // revoke user
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.REVOKE_USER.ordinal(),
+              AuthorOperator.AuthorType.REVOKE_USER.ordinal(),
               "tempuser0",
               "",
               "",
@@ -293,7 +305,7 @@ public class IoTDBClusterAuthorityIT {
       // revoke role
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.REVOKE_ROLE.ordinal(),
+              AuthorOperator.AuthorType.REVOKE_ROLE.ordinal(),
               "",
               "temprole0",
               "",
@@ -306,7 +318,7 @@ public class IoTDBClusterAuthorityIT {
       // list privileges user on root.ln.**
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_USER_PRIVILEGE.ordinal(),
+              AuthorOperator.AuthorType.LIST_USER_PRIVILEGE.ordinal(),
               "tempuser0",
               "",
               "",
@@ -322,7 +334,7 @@ public class IoTDBClusterAuthorityIT {
       // list privileges user on root.**
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_USER_PRIVILEGE.ordinal(),
+              AuthorOperator.AuthorType.LIST_USER_PRIVILEGE.ordinal(),
               "tempuser0",
               "",
               "",
@@ -338,7 +350,7 @@ public class IoTDBClusterAuthorityIT {
       // list user privileges
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_USER_PRIVILEGE.ordinal(),
+              AuthorOperator.AuthorType.LIST_USER_PRIVILEGE.ordinal(),
               "tempuser0",
               "",
               "",
@@ -354,7 +366,7 @@ public class IoTDBClusterAuthorityIT {
       // list privileges role on root.ln.**
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_ROLE_PRIVILEGE.ordinal(),
+              AuthorOperator.AuthorType.LIST_ROLE_PRIVILEGE.ordinal(),
               "",
               "temprole0",
               "",
@@ -371,7 +383,7 @@ public class IoTDBClusterAuthorityIT {
       // list privileges role on root.**
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_ROLE_PRIVILEGE.ordinal(),
+              AuthorOperator.AuthorType.LIST_ROLE_PRIVILEGE.ordinal(),
               "",
               "temprole0",
               "",
@@ -387,7 +399,7 @@ public class IoTDBClusterAuthorityIT {
       // list role privileges
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_ROLE_PRIVILEGE.ordinal(),
+              AuthorOperator.AuthorType.LIST_ROLE_PRIVILEGE.ordinal(),
               "",
               "temprole0",
               "",
@@ -403,7 +415,7 @@ public class IoTDBClusterAuthorityIT {
       // list all role of user
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_ROLE.ordinal(),
+              AuthorOperator.AuthorType.LIST_ROLE.ordinal(),
               "tempuser0",
               "",
               "",
@@ -419,7 +431,7 @@ public class IoTDBClusterAuthorityIT {
       // list all user of role
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_USER.ordinal(),
+              AuthorOperator.AuthorType.LIST_USER.ordinal(),
               "",
               "temprole0",
               "",
@@ -436,7 +448,7 @@ public class IoTDBClusterAuthorityIT {
       // revoke role from user
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.REVOKE_USER_ROLE.ordinal(),
+              AuthorOperator.AuthorType.REVOKE_USER_ROLE.ordinal(),
               "tempuser0",
               "temprole0",
               "",
@@ -449,7 +461,7 @@ public class IoTDBClusterAuthorityIT {
       // list root privileges
       authorizerReq =
           new TAuthorizerReq(
-              AuthorType.LIST_USER_PRIVILEGE.ordinal(),
+              AuthorOperator.AuthorType.LIST_USER_PRIVILEGE.ordinal(),
               "root",
               "",
               "",

@@ -30,6 +30,7 @@ import org.apache.iotdb.db.metadata.mnode.IMNode;
 import org.apache.iotdb.db.metadata.mnode.IMeasurementMNode;
 import org.apache.iotdb.db.metadata.mnode.MeasurementMNode;
 import org.apache.iotdb.db.mpp.plan.statement.metadata.template.CreateSchemaTemplateStatement;
+import org.apache.iotdb.db.qp.physical.sys.CreateTemplatePlan;
 import org.apache.iotdb.tsfile.common.constant.TsFileConstant;
 import org.apache.iotdb.tsfile.file.metadata.enums.CompressionType;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
@@ -80,31 +81,34 @@ public class Template implements Serializable {
     directNodes = new HashMap<>();
   }
 
-  /** build a template from a CreateSchemaTemplateStatement */
-  public Template(CreateSchemaTemplateStatement statement) throws IllegalPathException {
+  /**
+   * build a template from a createTemplatePlan
+   *
+   * @param plan createTemplatePlan
+   */
+  public Template(CreateTemplatePlan plan) throws IllegalPathException {
     boolean isAlign;
     schemaMap = new HashMap<>();
-    name = statement.getName();
+    name = plan.getName();
     isDirectAligned = false;
     directNodes = new HashMap<>();
     relatedSchemaRegion = new ConcurrentHashMap<>();
     rehashCode = 0;
 
-    for (int i = 0; i < statement.getMeasurements().size(); i++) {
+    for (int i = 0; i < plan.getMeasurements().size(); i++) {
       IMeasurementSchema curSchema;
-      int size = statement.getMeasurements().get(i).size();
+      int size = plan.getMeasurements().get(i).size();
       if (size > 1) {
         isAlign = true;
       } else {
         // If sublist of measurements has only one item,
         // but it share prefix with other aligned sublist, it will be aligned too
         String[] thisMeasurement =
-            PathUtils.splitPathToDetachedNodes(statement.getMeasurements().get(i).get(0));
+            PathUtils.splitPathToDetachedNodes(plan.getMeasurements().get(i).get(0));
         String thisPrefix =
             joinBySeparator(Arrays.copyOf(thisMeasurement, thisMeasurement.length - 1));
         isAlign =
-            statement.getAlignedDeviceId() != null
-                && statement.getAlignedDeviceId().contains(thisPrefix);
+            plan.getAlignedDeviceId() != null && plan.getAlignedDeviceId().contains(thisPrefix);
       }
 
       // vector, aligned measurements
@@ -116,10 +120,10 @@ public class Template implements Serializable {
         CompressionType[] compressorArray = new CompressionType[size];
 
         for (int j = 0; j < size; j++) {
-          measurementsArray[j] = statement.getMeasurements().get(i).get(j);
-          typeArray[j] = statement.getDataTypes().get(i).get(j);
-          encodingArray[j] = statement.getEncodings().get(i).get(j);
-          compressorArray[j] = statement.getCompressors().get(i).get(j);
+          measurementsArray[j] = plan.getMeasurements().get(i).get(j);
+          typeArray[j] = plan.getDataTypes().get(i).get(j);
+          encodingArray[j] = plan.getEncodings().get(i).get(j);
+          compressorArray[j] = plan.getCompressors().get(i).get(j);
         }
 
         curSchemas = constructSchemas(measurementsArray, typeArray, encodingArray, compressorArray);
@@ -130,13 +134,28 @@ public class Template implements Serializable {
       else {
         curSchema =
             new MeasurementSchema(
-                statement.getMeasurements().get(i).get(0),
-                statement.getDataTypes().get(i).get(0),
-                statement.getEncodings().get(i).get(0),
-                statement.getCompressors().get(i).get(0));
-        constructTemplateTree(statement.getMeasurements().get(i).get(0), curSchema);
+                plan.getMeasurements().get(i).get(0),
+                plan.getDataTypes().get(i).get(0),
+                plan.getEncodings().get(i).get(0),
+                plan.getCompressors().get(i).get(0));
+        constructTemplateTree(plan.getMeasurements().get(i).get(0), curSchema);
       }
     }
+  }
+
+  /**
+   * build a template from a CreateSchemaTemplateStatement
+   *
+   * @param statement CreateSchemaTemplateStatement
+   */
+  public Template(CreateSchemaTemplateStatement statement) throws IllegalPathException {
+    this(
+        new CreateTemplatePlan(
+            statement.getName(),
+            statement.getMeasurements(),
+            statement.getDataTypes(),
+            statement.getEncodings(),
+            statement.getCompressors()));
   }
 
   public int getId() {

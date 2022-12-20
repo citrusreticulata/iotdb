@@ -80,11 +80,6 @@ public class DataNodeWrapper extends AbstractNodeWrapper {
   }
 
   @Override
-  public String getSystemPropertiesPath() {
-    return workDirFilePath("data/datanode/system/schema", "system.properties");
-  }
-
-  @Override
   public final String getId() {
     return "DataNode" + getPort();
   }

@@ -292,7 +292,7 @@ public interface BaseConfig {
   }
 
   default long getTimePartitionInterval() {
-    return 604800000;
+    return 86400;
   }
 
   default BaseConfig setConfigNodeRatisSnapshotTriggerThreshold(int ratisSnapshotTriggerThreshold) {

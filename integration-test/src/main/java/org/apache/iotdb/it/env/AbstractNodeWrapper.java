@@ -68,9 +68,9 @@ public abstract class AbstractNodeWrapper implements BaseNodeWrapper {
           + "bin"
           + File.separator
           + (SystemUtils.IS_OS_WINDOWS ? "java.exe" : "java");
-  public static final String templateNodePath =
+  private final String templateNodePath =
       System.getProperty("user.dir") + File.separator + "target" + File.separator + "template-node";
-  public static final String templateNodeLibPath =
+  protected static final String templateNodeLibPath =
       System.getProperty("user.dir")
           + File.separator
           + "target"
@@ -273,8 +273,6 @@ public abstract class AbstractNodeWrapper implements BaseNodeWrapper {
   protected abstract String getConfigPath();
 
   protected abstract String getCommonConfigPath();
-
-  public abstract String getSystemPropertiesPath();
 
   protected abstract void updateConfig(Properties properties);
 

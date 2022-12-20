@@ -50,14 +50,11 @@ import org.apache.iotdb.confignode.manager.node.NodeManager;
 import org.apache.iotdb.confignode.manager.partition.PartitionManager;
 import org.apache.iotdb.confignode.rpc.thrift.TConfigNodeRegisterReq;
 import org.apache.iotdb.confignode.rpc.thrift.TConfigNodeRegisterResp;
-import org.apache.iotdb.confignode.rpc.thrift.TConfigNodeRestartReq;
 import org.apache.iotdb.confignode.rpc.thrift.TCreateCQReq;
 import org.apache.iotdb.confignode.rpc.thrift.TCreateFunctionReq;
 import org.apache.iotdb.confignode.rpc.thrift.TCreatePipeReq;
 import org.apache.iotdb.confignode.rpc.thrift.TCreateSchemaTemplateReq;
 import org.apache.iotdb.confignode.rpc.thrift.TCreateTriggerReq;
-import org.apache.iotdb.confignode.rpc.thrift.TDataNodeRestartReq;
-import org.apache.iotdb.confignode.rpc.thrift.TDataNodeRestartResp;
 import org.apache.iotdb.confignode.rpc.thrift.TDataPartitionTableResp;
 import org.apache.iotdb.confignode.rpc.thrift.TDeactivateSchemaTemplateReq;
 import org.apache.iotdb.confignode.rpc.thrift.TDeleteTimeSeriesReq;
@@ -177,13 +174,6 @@ public interface IManager {
   CQManager getCQManager();
 
   /**
-   * Get system configurations that is not associated with the DataNodeId
-   *
-   * @return SystemConfigurationResp
-   */
-  DataSet getSystemConfiguration();
-
-  /**
    * Register DataNode
    *
    * @return DataNodeConfigurationDataSet
@@ -191,12 +181,11 @@ public interface IManager {
   DataSet registerDataNode(RegisterDataNodePlan registerDataNodePlan);
 
   /**
-   * Restart DataNode
+   * Get configuration information that is not associated with the DataNodeId
    *
-   * @param req TDataNodeRestartReq
-   * @return SUCCESS_STATUS if allow DataNode to restart, REJECT_START otherwise
+   * @return ConfigurationResp
    */
-  TDataNodeRestartResp restartDataNode(TDataNodeRestartReq req);
+  DataSet getConfiguration();
 
   /**
    * Remove DataNode
@@ -330,8 +319,6 @@ public interface IManager {
    * @return TConfigNodeRegisterResp
    */
   TConfigNodeRegisterResp registerConfigNode(TConfigNodeRegisterReq req);
-
-  TSStatus restartConfigNode(TConfigNodeRestartReq req);
 
   /**
    * Create peer in new node to build consensus group.

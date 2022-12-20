@@ -23,9 +23,8 @@ import org.apache.iotdb.commons.path.MeasurementPath;
 import org.apache.iotdb.commons.path.PartialPath;
 import org.apache.iotdb.commons.utils.FileUtils;
 import org.apache.iotdb.db.conf.IoTDBDescriptor;
-import org.apache.iotdb.db.metadata.plan.schemaregion.impl.SchemaRegionPlanFactory;
-import org.apache.iotdb.db.metadata.plan.schemaregion.write.ICreateAlignedTimeSeriesPlan;
-import org.apache.iotdb.db.metadata.plan.schemaregion.write.ICreateTimeSeriesPlan;
+import org.apache.iotdb.db.qp.physical.sys.CreateAlignedTimeSeriesPlan;
+import org.apache.iotdb.db.qp.physical.sys.CreateTimeSeriesPlan;
 import org.apache.iotdb.tsfile.common.conf.TSFileDescriptor;
 import org.apache.iotdb.tsfile.file.metadata.enums.CompressionType;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
@@ -173,8 +172,8 @@ public class TagSchemaRegionTest {
   }
 
   private void createTimeseries() throws Exception {
-    ICreateTimeSeriesPlan createTimeSeriesPlan =
-        SchemaRegionPlanFactory.getCreateTimeSeriesPlan(
+    CreateTimeSeriesPlan createTimeSeriesPlan =
+        new CreateTimeSeriesPlan(
             new PartialPath(storageGroup + ".tag1.a.tag2.b.s0"),
             TSDataType.valueOf("INT32"),
             TSEncoding.valueOf("RLE"),
@@ -185,7 +184,7 @@ public class TagSchemaRegionTest {
             null);
     tagSchemaRegion.createTimeseries(createTimeSeriesPlan, 0);
     createTimeSeriesPlan =
-        SchemaRegionPlanFactory.getCreateTimeSeriesPlan(
+        new CreateTimeSeriesPlan(
             new PartialPath(storageGroup + ".tag1.a.tag2.c.s0"),
             TSDataType.valueOf("INT32"),
             TSEncoding.valueOf("RLE"),
@@ -198,9 +197,8 @@ public class TagSchemaRegionTest {
   }
 
   private void createAlignedTimeseries() throws Exception {
-
-    ICreateAlignedTimeSeriesPlan plan =
-        SchemaRegionPlanFactory.getCreateAlignedTimeSeriesPlan(
+    CreateAlignedTimeSeriesPlan plan =
+        new CreateAlignedTimeSeriesPlan(
             new PartialPath(storageGroup + ".tag1.a.tag3.b"),
             Arrays.asList("s1", "s2", "s3"),
             Arrays.asList(
@@ -215,7 +213,7 @@ public class TagSchemaRegionTest {
             null);
     tagSchemaRegion.createAlignedTimeSeries(plan);
     plan =
-        SchemaRegionPlanFactory.getCreateAlignedTimeSeriesPlan(
+        new CreateAlignedTimeSeriesPlan(
             new PartialPath(storageGroup + ".tag1.x.tag2.y"),
             Arrays.asList("s1", "s2", "s3"),
             Arrays.asList(

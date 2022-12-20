@@ -1361,7 +1361,7 @@ public class SchemaRegionMemoryImpl implements ISchemaRegion {
   }
 
   /**
-   * Upsert tags and attributes key-value for the timeseries if the key has existed, just use the
+   * upsert tags and attributes key-value for the timeseries if the key has existed, just use the
    * new value to update it.
    *
    * @param alias newly added alias
@@ -1371,7 +1371,7 @@ public class SchemaRegionMemoryImpl implements ISchemaRegion {
    */
   @Override
   @SuppressWarnings("squid:S3776") // Suppress high Cognitive Complexity warning
-  public void upsertAliasAndTagsAndAttributes(
+  public void upsertTagsAndAttributes(
       String alias,
       Map<String, String> tagsMap,
       Map<String, String> attributesMap,
@@ -1420,11 +1420,10 @@ public class SchemaRegionMemoryImpl implements ISchemaRegion {
   }
 
   /**
-   * Add new attributes key-value for the timeseries
+   * add new attributes key-value for the timeseries
    *
    * @param attributesMap newly added attributes map
    * @param fullPath timeseries
-   * @throws MetadataException tagLogFile write error or attributes already exist
    */
   @Override
   public void addAttributes(Map<String, String> attributesMap, PartialPath fullPath)
@@ -1443,11 +1442,10 @@ public class SchemaRegionMemoryImpl implements ISchemaRegion {
   }
 
   /**
-   * Add new tags key-value for the timeseries
+   * add new tags key-value for the timeseries
    *
    * @param tagsMap newly added tags map
    * @param fullPath timeseries
-   * @throws MetadataException tagLogFile write error or tags already exist
    */
   @Override
   public void addTags(Map<String, String> tagsMap, PartialPath fullPath)
@@ -1467,8 +1465,7 @@ public class SchemaRegionMemoryImpl implements ISchemaRegion {
   }
 
   /**
-   * Drop tags or attributes of the timeseries. It will not throw exception even if the key does not
-   * exist.
+   * drop tags or attributes of the timeseries
    *
    * @param keySet tags key or attributes key
    * @param fullPath timeseries path
@@ -1485,11 +1482,10 @@ public class SchemaRegionMemoryImpl implements ISchemaRegion {
   }
 
   /**
-   * Set/change the values of tags or attributes
+   * set/change the values of tags or attributes
    *
    * @param alterMap the new tags or attributes key-value
    * @param fullPath timeseries
-   * @throws MetadataException tagLogFile write error or tags/attributes do not exist
    */
   @Override
   @SuppressWarnings("squid:S3776") // Suppress high Cognitive Complexity warning
@@ -1506,13 +1502,11 @@ public class SchemaRegionMemoryImpl implements ISchemaRegion {
   }
 
   /**
-   * Rename the tag or attribute's key of the timeseries
+   * rename the tag or attribute's key of the timeseries
    *
    * @param oldKey old key of tag or attribute
    * @param newKey new key of tag or attribute
    * @param fullPath timeseries
-   * @throws MetadataException tagLogFile write error or does not have tag/attribute or already has
-   *     a tag/attribute named newKey
    */
   @Override
   @SuppressWarnings("squid:S3776") // Suppress high Cognitive Complexity warning

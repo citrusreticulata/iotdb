@@ -98,16 +98,14 @@ import static java.util.stream.Collectors.toList;
  * </ol>
  */
 @SuppressWarnings("java:S1135") // ignore todos
-// Now it's only used for test and isn't able to recover after restarting
-@Deprecated
 public class LocalSchemaProcessor {
 
   private static final Logger logger = LoggerFactory.getLogger(LocalSchemaProcessor.class);
 
   protected static IoTDBConfig config = IoTDBDescriptor.getInstance().getConfig();
 
-  private final LocalConfigNode configManager = LocalConfigNode.getInstance();
-  private final SchemaEngine schemaEngine = SchemaEngine.getInstance();
+  private LocalConfigNode configManager = LocalConfigNode.getInstance();
+  private SchemaEngine schemaEngine = SchemaEngine.getInstance();
 
   // region SchemaProcessor Singleton
   private static class LocalSchemaProcessorHolder {
@@ -808,7 +806,7 @@ public class LocalSchemaProcessor {
       PartialPath fullPath)
       throws MetadataException, IOException {
     getBelongedSchemaRegion(fullPath)
-        .upsertAliasAndTagsAndAttributes(alias, tagsMap, attributesMap, fullPath);
+        .upsertTagsAndAttributes(alias, tagsMap, attributesMap, fullPath);
   }
 
   /**

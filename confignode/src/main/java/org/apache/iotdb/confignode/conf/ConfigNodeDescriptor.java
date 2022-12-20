@@ -780,8 +780,6 @@ public class ConfigNodeDescriptor {
   /**
    * Check if the current ConfigNode is SeedConfigNode.
    *
-   * <p>Notice: Only invoke this interface when first startup.
-   *
    * @return True if the target_config_node_list points to itself
    */
   public boolean isSeedConfigNode() {

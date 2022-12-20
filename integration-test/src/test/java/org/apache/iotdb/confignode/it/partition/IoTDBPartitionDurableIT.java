@@ -229,7 +229,7 @@ public class IoTDBPartitionDurableIT {
           schemaPartitionTableResp.getStatus().getCode());
 
       /* Register a new DataNode */
-      EnvFactory.getEnv().registerNewDataNode(true);
+      EnvFactory.getEnv().registerNewDataNode();
 
       /* Test getOrCreateSchemaPartition, ConfigNode should create SchemaPartition and return */
       schemaPartitionReq =
@@ -370,7 +370,7 @@ public class IoTDBPartitionDurableIT {
           dataPartitionTableResp.getStatus().getCode());
 
       /* Register a new DataNode */
-      EnvFactory.getEnv().registerNewDataNode(true);
+      EnvFactory.getEnv().registerNewDataNode();
 
       /* Test getOrCreateDataPartition, ConfigNode should create DataPartition and return */
       partitionSlotsMap =

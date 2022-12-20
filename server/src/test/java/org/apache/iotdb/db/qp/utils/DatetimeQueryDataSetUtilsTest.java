@@ -18,6 +18,8 @@
  */
 package org.apache.iotdb.db.qp.utils;
 
+import org.apache.iotdb.db.exception.query.LogicalOperatorException;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -38,7 +40,7 @@ public class DatetimeQueryDataSetUtilsTest {
 
   /** Test convertDatetimeStrToLong() method with different time precision. */
   @Test
-  public void convertDatetimeStrToLongTest1() {
+  public void convertDatetimeStrToLongTest1() throws LogicalOperatorException {
     zoneOffset = ZonedDateTime.now().getOffset();
     zoneId = ZoneId.systemDefault();
     if (zoneOffset.toString().equals("Z")) {
@@ -51,7 +53,7 @@ public class DatetimeQueryDataSetUtilsTest {
   }
 
   @Test
-  public void convertDatetimeStrToLongTest2() {
+  public void convertDatetimeStrToLongTest2() throws LogicalOperatorException {
     zoneOffset = ZoneOffset.UTC;
     zoneId = ZoneId.of("Etc/UTC");
     delta = 8 * 3600000;
@@ -60,7 +62,7 @@ public class DatetimeQueryDataSetUtilsTest {
   }
 
   @Test
-  public void convertDatetimeStrToLongTest3() {
+  public void convertDatetimeStrToLongTest3() throws LogicalOperatorException {
     zoneOffset = ZoneOffset.UTC;
     zoneId = ZoneId.of("Etc/UTC");
     delta = 8 * 3600000;
@@ -169,8 +171,8 @@ public class DatetimeQueryDataSetUtilsTest {
         31 * 86400000L, DateTimeUtils.convertDurationStrToLong(28857600000L, 1, "mo", "ms"));
   }
 
-  public void testConvertDatetimeStrToLongWithoutMS(
-      ZoneOffset zoneOffset, ZoneId zoneId, long res) {
+  public void testConvertDatetimeStrToLongWithoutMS(ZoneOffset zoneOffset, ZoneId zoneId, long res)
+      throws LogicalOperatorException {
     String[] timeFormatWithoutMs =
         new String[] {
           "2019-01-02 15:13:27",
@@ -195,7 +197,8 @@ public class DatetimeQueryDataSetUtilsTest {
     }
   }
 
-  public void testConvertDatetimeStrToLongWithMS(ZoneOffset zoneOffset, ZoneId zoneId, long res) {
+  public void testConvertDatetimeStrToLongWithMS(ZoneOffset zoneOffset, ZoneId zoneId, long res)
+      throws LogicalOperatorException {
     String[] timeFormatWithoutMs =
         new String[] {
           "2019-01-02 15:13:27.689",
@@ -220,7 +223,8 @@ public class DatetimeQueryDataSetUtilsTest {
     }
   }
 
-  public void testConvertDateStrToLong(ZoneOffset zoneOffset, ZoneId zoneId, long res) {
+  public void testConvertDateStrToLong(ZoneOffset zoneOffset, ZoneId zoneId, long res)
+      throws LogicalOperatorException {
     String[] timeFormatWithoutMs =
         new String[] {
           "2019-01-02", "2019/01/02", "2019.01.02",

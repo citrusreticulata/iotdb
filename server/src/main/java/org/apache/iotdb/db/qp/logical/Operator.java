@@ -18,7 +18,11 @@
  */
 package org.apache.iotdb.db.qp.logical;
 
+import org.apache.iotdb.db.exception.query.LogicalOperatorException;
+import org.apache.iotdb.db.exception.query.QueryProcessException;
 import org.apache.iotdb.db.qp.constant.SQLConstant;
+import org.apache.iotdb.db.qp.physical.PhysicalPlan;
+import org.apache.iotdb.db.qp.strategy.PhysicalGenerator;
 
 /** This class is a superclass of all operator. */
 public abstract class Operator {
@@ -69,9 +73,18 @@ public abstract class Operator {
     return isPrefixMatchPath;
   }
 
+  public void setPrefixMatchPath(boolean prefixMatchPath) {
+    isPrefixMatchPath = prefixMatchPath;
+  }
+
   @Override
   public String toString() {
     return SQLConstant.tokenNames.get(tokenIntType);
+  }
+
+  public PhysicalPlan generatePhysicalPlan(PhysicalGenerator generator)
+      throws QueryProcessException {
+    throw new LogicalOperatorException(operatorType.toString(), "");
   }
 
   /** If you want to add new OperatorType, you must add it in the last. */

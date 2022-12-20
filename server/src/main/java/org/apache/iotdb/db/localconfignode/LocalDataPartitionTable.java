@@ -33,7 +33,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Deprecated
 public class LocalDataPartitionTable {
   private static final Logger LOG = LoggerFactory.getLogger(LocalDataPartitionTable.class);
 

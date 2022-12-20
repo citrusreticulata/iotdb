@@ -20,7 +20,6 @@ package org.apache.iotdb.session.pool;
 
 import org.apache.iotdb.rpc.IoTDBConnectionException;
 import org.apache.iotdb.rpc.StatementExecutionException;
-import org.apache.iotdb.service.rpc.thrift.TSBackupConfigurationResp;
 import org.apache.iotdb.service.rpc.thrift.TSConnectionInfoResp;
 import org.apache.iotdb.session.Session;
 import org.apache.iotdb.session.SessionConfig;
@@ -2574,25 +2573,6 @@ public class SessionPool {
 
   public int getConnectionTimeoutInMs() {
     return connectionTimeoutInMs;
-  }
-
-  public TSBackupConfigurationResp getBackupConfiguration()
-      throws IoTDBConnectionException, StatementExecutionException {
-    for (int i = 0; i < RETRY; i++) {
-      Session session = getSession();
-      try {
-        TSBackupConfigurationResp resp = session.getBackupConfiguration();
-        putBack(session);
-        return resp;
-      } catch (IoTDBConnectionException e) {
-        // TException means the connection is broken, remove it and get a new one.
-        cleanSessionAndMayThrowConnectionException(session, i, e);
-      } catch (RuntimeException e) {
-        putBack(session);
-        throw e;
-      }
-    }
-    return null;
   }
 
   public TSConnectionInfoResp fetchAllConnections() throws IoTDBConnectionException {

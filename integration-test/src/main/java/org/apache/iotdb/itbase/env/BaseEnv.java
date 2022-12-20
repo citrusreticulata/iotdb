@@ -195,29 +195,13 @@ public interface BaseEnv {
   /** Shutdown an existed ConfigNode */
   void shutdownConfigNode(int index);
 
-  /** @return The ConfigNodeWrapper of the specified index */
-  ConfigNodeWrapper getConfigNodeWrapper(int index);
-
-  /** @return The DataNodeWrapper of the specified indexx */
+  /** @return The TDataNodeLocation of the specified DataNode */
   DataNodeWrapper getDataNodeWrapper(int index);
 
-  /** @return A random available ConfigNodeWrapper */
-  ConfigNodeWrapper generateRandomConfigNodeWrapper();
+  /** Register a new DataNode */
+  void registerNewDataNode();
 
-  /** @return A random available ConfigNodeWrapper */
-  DataNodeWrapper generateRandomDataNodeWrapper();
-
-  /** Register a new DataNode with random ports */
-  void registerNewDataNode(boolean isNeedVerify);
-
-  /** Register a new ConfigNode with random ports */
-  void registerNewConfigNode(boolean isNeedVerify);
-
-  /** Register a new DataNode with specified DataNodeWrapper */
-  void registerNewDataNode(DataNodeWrapper newDataNodeWrapper, boolean isNeedVerify);
-
-  /** Register a new DataNode with specified ConfigNodeWrapper */
-  void registerNewConfigNode(ConfigNodeWrapper newConfigNodeWrapper, boolean isNeedVerify);
+  void registerNewConfigNode();
 
   /** Start an existed DataNode */
   void startDataNode(int index);
@@ -226,12 +210,4 @@ public interface BaseEnv {
   void shutdownDataNode(int index);
 
   int getMqttPort();
-
-  String getIP();
-
-  String getPort();
-
-  String getSbinPath();
-
-  String getLibPath();
 }
