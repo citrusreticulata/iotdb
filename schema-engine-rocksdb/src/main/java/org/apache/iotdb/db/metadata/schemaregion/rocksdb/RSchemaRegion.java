@@ -714,6 +714,12 @@ public class RSchemaRegion implements ISchemaRegion {
     throw new UnsupportedOperationException("createLogicalView is unsupported.");
   }
 
+  @Override
+  public void alterLogicalView(ICreateLogicalViewPlan alterLogicalViewPlan)
+      throws MetadataException {
+    throw new UnsupportedOperationException("alterLogicalViewPlan is unsupported.");
+  }
+
   private void traverseOutcomeBasins(
       String[] nodes,
       int maxLevel,

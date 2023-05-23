@@ -37,6 +37,7 @@ import org.apache.iotdb.db.metadata.template.Template;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.PlanNode;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.PlanVisitor;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.metedata.write.ActivateTemplateNode;
+import org.apache.iotdb.db.mpp.plan.planner.plan.node.metedata.write.AlterLogicalViewNode;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.metedata.write.AlterTimeSeriesNode;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.metedata.write.BatchActivateTemplateNode;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.metedata.write.ConstructSchemaBlackListNode;
@@ -450,6 +451,25 @@ public class SchemaExecutionVisitor extends PlanVisitor<TSStatus, ISchemaRegion>
     for (Map.Entry<PartialPath, ViewExpression> entry : viewPathToSourceMap.entrySet()) {
       try {
         schemaRegion.createLogicalView(
+            new CreateLogicalViewPlanImpl(entry.getKey(), entry.getValue()));
+      } catch (MetadataException e) {
+        logger.error("{}: MetaData error: ", IoTDBConstant.GLOBAL_DB_NAME, e);
+        failingStatus.add(RpcUtils.getStatus(e.getErrorCode(), e.getMessage()));
+      }
+    }
+    if (!failingStatus.isEmpty()) {
+      return RpcUtils.getStatus(failingStatus);
+    }
+    return RpcUtils.getStatus(TSStatusCode.SUCCESS_STATUS, "Execute successfully");
+  }
+
+  @Override
+  public TSStatus visitAlterLogicalView(AlterLogicalViewNode node, ISchemaRegion schemaRegion) {
+    Map<PartialPath, ViewExpression> viewPathToSourceMap = node.getViewPathToSourceExpressionMap();
+    List<TSStatus> failingStatus = new ArrayList<>();
+    for (Map.Entry<PartialPath, ViewExpression> entry : viewPathToSourceMap.entrySet()) {
+      try {
+        schemaRegion.alterLogicalView(
             new CreateLogicalViewPlanImpl(entry.getKey(), entry.getValue()));
       } catch (MetadataException e) {
         logger.error("{}: MetaData error: ", IoTDBConstant.GLOBAL_DB_NAME, e);

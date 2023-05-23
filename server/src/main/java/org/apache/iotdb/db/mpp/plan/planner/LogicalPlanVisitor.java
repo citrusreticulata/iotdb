@@ -31,6 +31,7 @@ import org.apache.iotdb.db.mpp.plan.expression.visitor.TransformToViewExpression
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.PlanNode;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.load.LoadTsFileNode;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.metedata.write.ActivateTemplateNode;
+import org.apache.iotdb.db.mpp.plan.planner.plan.node.metedata.write.AlterLogicalViewNode;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.metedata.write.AlterTimeSeriesNode;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.metedata.write.BatchActivateTemplateNode;
 import org.apache.iotdb.db.mpp.plan.planner.plan.node.metedata.write.CreateAlignedTimeSeriesNode;
@@ -64,6 +65,7 @@ import org.apache.iotdb.db.mpp.plan.statement.internal.InternalBatchActivateTemp
 import org.apache.iotdb.db.mpp.plan.statement.internal.InternalCreateMultiTimeSeriesStatement;
 import org.apache.iotdb.db.mpp.plan.statement.internal.InternalCreateTimeSeriesStatement;
 import org.apache.iotdb.db.mpp.plan.statement.internal.SchemaFetchStatement;
+import org.apache.iotdb.db.mpp.plan.statement.metadata.AlterLogicalViewStatement;
 import org.apache.iotdb.db.mpp.plan.statement.metadata.AlterTimeSeriesStatement;
 import org.apache.iotdb.db.mpp.plan.statement.metadata.CountDevicesStatement;
 import org.apache.iotdb.db.mpp.plan.statement.metadata.CountLevelTimeSeriesStatement;
@@ -842,6 +844,23 @@ public class LogicalPlanVisitor extends StatementVisitor<PlanNode, MPPQueryConte
     return new CreateLogicalViewNode(
         context.getQueryId().genPlanNodeId(),
         createLogicalViewStatement.getTargetPathList(),
+        viewExpressionList);
+  }
+
+  @Override
+  public PlanNode visitAlterLogicalView(
+      AlterLogicalViewStatement alterLogicalViewStatement, MPPQueryContext context) {
+    // Transform all Expressions into ViewExpressions.
+    TransformToViewExpressionVisitor transformToViewExpressionVisitor =
+        new TransformToViewExpressionVisitor();
+    List<ViewExpression> viewExpressionList = new ArrayList<>();
+    List<Expression> expressionList = alterLogicalViewStatement.getSourceExpressionList();
+    for (Expression expression : expressionList) {
+      viewExpressionList.add(transformToViewExpressionVisitor.process(expression, null));
+    }
+    return new AlterLogicalViewNode(
+        context.getQueryId().genPlanNodeId(),
+        alterLogicalViewStatement.getTargetPathList(),
         viewExpressionList);
   }
 }

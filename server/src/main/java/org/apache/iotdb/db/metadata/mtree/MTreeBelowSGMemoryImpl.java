@@ -1082,5 +1082,49 @@ public class MTreeBelowSGMemoryImpl {
       return measurementMNode;
     }
   }
+
+  public IMeasurementMNode<IMemMNode> alterLogicalView(
+      PartialPath path, ViewExpression viewExpression) throws MetadataException {
+    // check path
+    String[] nodeNames = path.getNodes();
+    if (nodeNames.length <= 2) {
+      throw new IllegalPathException(path.getFullPath());
+    }
+    MetaFormatUtils.checkTimeseries(path);
+    PartialPath devicePath = path.getDevicePath();
+    IMemMNode deviceParent = checkAndAutoCreateInternalPath(devicePath);
+
+    synchronized (this) {
+      IMemMNode device = checkAndAutoCreateDeviceNode(devicePath.getTailNode(), deviceParent);
+
+      String leafName = path.getMeasurement();
+
+      // no need to check alias, because logical view has no alias
+
+      if (device.isDevice() && device.getAsDeviceMNode().isAligned()) {
+        throw new AlignedTimeseriesException(
+            "timeseries under the entity is aligned, can not create view under this entity.",
+            device.getFullPath());
+      }
+
+      if (device.hasChild(leafName)) {
+        IMemMNode node = device.getChild(leafName);
+        if (node.isMeasurement()) {
+          if (node.getAsMeasurementMNode().isPreDeleted()) {
+            throw new MeasurementInBlackListException(path);
+          } else {
+            // alter the measurement
+            LogicalViewSchema logicalViewSchema = new LogicalViewSchema(leafName, viewExpression);
+            node.getAsMeasurementMNode().setSchema(logicalViewSchema);
+            return node.getAsMeasurementMNode();
+          }
+        } else {
+          throw new PathAlreadyExistException(path.getFullPath());
+        }
+      } else {
+        throw new PathNotExistException(path.getFullPath());
+      }
+    }
+  }
   // endregion
 }

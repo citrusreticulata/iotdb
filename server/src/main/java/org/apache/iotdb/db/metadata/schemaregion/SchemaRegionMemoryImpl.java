@@ -828,6 +828,29 @@ public class SchemaRegionMemoryImpl implements ISchemaRegion {
     // TODO: CRTODO: shall we update id table?
   }
 
+  @Override
+  public void alterLogicalView(ICreateLogicalViewPlan plan) throws MetadataException {
+    try {
+      List<PartialPath> pathList = plan.getViewPathList();
+      Map<PartialPath, ViewExpression> viewPathToSourceMap =
+          plan.getViewPathToSourceExpressionMap();
+      for (PartialPath path : pathList) {
+        try {
+          IMeasurementMNode<IMemMNode> leafMNode;
+          leafMNode = mtree.alterLogicalView(path, viewPathToSourceMap.get(path));
+        } catch (Throwable t) {
+          throw t;
+        }
+      }
+      // write log
+      if (!isRecovering) {
+        writeToMLog(plan);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   private void deleteSingleTimeseriesInBlackList(PartialPath path)
       throws MetadataException, IOException {
     IMeasurementMNode<IMemMNode> measurementMNode = mtree.deleteTimeseries(path);

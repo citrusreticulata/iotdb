@@ -3318,23 +3318,23 @@ public class AnalyzeVisitor extends StatementVisitor<Analysis, MPPQueryContext> 
   }
 
   private Analysis checkPathsInAlterLogicalView(
-    Analysis analysis, AlterLogicalViewStatement alterLogicalViewStatement) {
+      Analysis analysis, AlterLogicalViewStatement alterLogicalViewStatement) {
     Pair<Boolean, String> checkResult = alterLogicalViewStatement.checkAllPaths();
     if (!checkResult.left) {
       analysis.setFinishQueryAfterAnalyze(true);
       analysis.setFailStatus(
-        RpcUtils.getStatus(
-          TSStatusCode.ILLEGAL_PATH.getStatusCode(),
-          "The path " + checkResult.right + " is illegal."));
+          RpcUtils.getStatus(
+              TSStatusCode.ILLEGAL_PATH.getStatusCode(),
+              "The path " + checkResult.right + " is illegal."));
       return analysis;
     }
     if (alterLogicalViewStatement.getSourceExpressionList().size()
-      != alterLogicalViewStatement.getTargetPathList().size()) {
+        != alterLogicalViewStatement.getTargetPathList().size()) {
       analysis.setFinishQueryAfterAnalyze(true);
       analysis.setFailStatus(
-        RpcUtils.getStatus(
-          TSStatusCode.UNSUPPORTED_OPERATION.getStatusCode(),
-          "The number of target and source paths are miss matched! Please check your SQL."));
+          RpcUtils.getStatus(
+              TSStatusCode.UNSUPPORTED_OPERATION.getStatusCode(),
+              "The number of target and source paths are miss matched! Please check your SQL."));
       return analysis;
     }
     return analysis;
@@ -3385,7 +3385,8 @@ public class AnalyzeVisitor extends StatementVisitor<Analysis, MPPQueryContext> 
   }
 
   @Override
-  public Analysis visitAlterLogicalView(AlterLogicalViewStatement alterLogicalViewStatement, MPPQueryContext context) {
+  public Analysis visitAlterLogicalView(
+      AlterLogicalViewStatement alterLogicalViewStatement, MPPQueryContext context) {
     Analysis analysis = new Analysis();
     context.setQueryType(QueryType.WRITE);
 
@@ -3393,7 +3394,7 @@ public class AnalyzeVisitor extends StatementVisitor<Analysis, MPPQueryContext> 
     QueryStatement queryStatement = alterLogicalViewStatement.getQueryStatement();
     if (queryStatement != null) {
       Pair<List<Expression>, Analysis> queryAnalysisPair =
-        this.analyzeQueryInLogicalViewStatement(analysis, queryStatement, context);
+          this.analyzeQueryInLogicalViewStatement(analysis, queryStatement, context);
       if (queryAnalysisPair.right.isFinishQueryAfterAnalyze()) {
         return analysis;
       } else if (queryAnalysisPair.left != null) {

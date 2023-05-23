@@ -19,7 +19,6 @@
 
 package org.apache.iotdb.db.mpp.plan.statement.metadata;
 
-import org.apache.iotdb.commons.exception.IllegalPathException;
 import org.apache.iotdb.commons.path.PartialPath;
 import org.apache.iotdb.db.metadata.view.ViewPathType;
 import org.apache.iotdb.db.metadata.view.ViewPaths;
@@ -137,7 +136,7 @@ public class AlterLogicalViewStatement extends Statement {
    */
   public Pair<Boolean, String> checkSourcePathsIfNotUsingQueryStatement() {
     if (this.sourcePaths.viewPathType == ViewPathType.PATHS_GROUP
-      || this.sourcePaths.viewPathType == ViewPathType.FULL_PATH_LIST) {
+        || this.sourcePaths.viewPathType == ViewPathType.FULL_PATH_LIST) {
       for (PartialPath thisPath : this.sourcePaths.fullPathList) {
         if (thisPath.getNodeLength() < 3) {
           return new Pair<>(false, thisPath.getFullPath());

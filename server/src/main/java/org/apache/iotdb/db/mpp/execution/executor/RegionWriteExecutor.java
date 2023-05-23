@@ -735,7 +735,7 @@ public class RegionWriteExecutor {
       if (config.getSchemaRegionConsensusProtocolClass().equals(ConsensusFactory.RATIS_CONSENSUS)) {
         context.getRegionWriteValidationRWLock().writeLock().lock();
         try {
-          // step 1. make sure all target paths are NOT exist.
+          // step 1. make sure all target paths DO NOT exist.
           List<PartialPath> targetPaths = node.getViewPathList();
           List<MetadataException> failingMetadataException = new ArrayList<>();
           for (PartialPath thisPath : targetPaths) {

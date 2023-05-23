@@ -176,6 +176,8 @@ public interface ISchemaRegion {
 
   // region Interfaces for Logical View
   void createLogicalView(ICreateLogicalViewPlan createLogicalViewPlan) throws MetadataException;
+
+  void alterLogicalView(ICreateLogicalViewPlan alterLogicalViewPlan) throws MetadataException;
   // endregion
 
   // region Interfaces for metadata info Query
