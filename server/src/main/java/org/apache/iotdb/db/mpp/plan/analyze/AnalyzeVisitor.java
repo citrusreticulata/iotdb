@@ -112,6 +112,7 @@ import org.apache.iotdb.db.mpp.plan.statement.internal.InternalBatchActivateTemp
 import org.apache.iotdb.db.mpp.plan.statement.internal.InternalCreateMultiTimeSeriesStatement;
 import org.apache.iotdb.db.mpp.plan.statement.internal.InternalCreateTimeSeriesStatement;
 import org.apache.iotdb.db.mpp.plan.statement.internal.SchemaFetchStatement;
+import org.apache.iotdb.db.mpp.plan.statement.metadata.AlterLogicalViewStatement;
 import org.apache.iotdb.db.mpp.plan.statement.metadata.AlterTimeSeriesStatement;
 import org.apache.iotdb.db.mpp.plan.statement.metadata.CountDatabaseStatement;
 import org.apache.iotdb.db.mpp.plan.statement.metadata.CountDevicesStatement;
@@ -3316,6 +3317,29 @@ public class AnalyzeVisitor extends StatementVisitor<Analysis, MPPQueryContext> 
     return analysis;
   }
 
+  private Analysis checkPathsInAlterLogicalView(
+    Analysis analysis, AlterLogicalViewStatement alterLogicalViewStatement) {
+    Pair<Boolean, String> checkResult = alterLogicalViewStatement.checkAllPaths();
+    if (!checkResult.left) {
+      analysis.setFinishQueryAfterAnalyze(true);
+      analysis.setFailStatus(
+        RpcUtils.getStatus(
+          TSStatusCode.ILLEGAL_PATH.getStatusCode(),
+          "The path " + checkResult.right + " is illegal."));
+      return analysis;
+    }
+    if (alterLogicalViewStatement.getSourceExpressionList().size()
+      != alterLogicalViewStatement.getTargetPathList().size()) {
+      analysis.setFinishQueryAfterAnalyze(true);
+      analysis.setFailStatus(
+        RpcUtils.getStatus(
+          TSStatusCode.UNSUPPORTED_OPERATION.getStatusCode(),
+          "The number of target and source paths are miss matched! Please check your SQL."));
+      return analysis;
+    }
+    return analysis;
+  }
+
   // create Logical View
   @Override
   public Analysis visitCreateLogicalView(
@@ -3352,6 +3376,50 @@ public class AnalyzeVisitor extends StatementVisitor<Analysis, MPPQueryContext> 
     // set schema partition info, this info will be used to split logical plan node.
     PathPatternTree patternTree = new PathPatternTree();
     for (PartialPath thisFullPath : createLogicalViewStatement.getTargetPathList()) {
+      patternTree.appendFullPath(thisFullPath);
+    }
+    SchemaPartition schemaPartitionInfo = partitionFetcher.getOrCreateSchemaPartition(patternTree);
+    analysis.setSchemaPartitionInfo(schemaPartitionInfo);
+
+    return analysis;
+  }
+
+  @Override
+  public Analysis visitAlterLogicalView(AlterLogicalViewStatement alterLogicalViewStatement, MPPQueryContext context) {
+    Analysis analysis = new Analysis();
+    context.setQueryType(QueryType.WRITE);
+
+    // analyze query in statement
+    QueryStatement queryStatement = alterLogicalViewStatement.getQueryStatement();
+    if (queryStatement != null) {
+      Pair<List<Expression>, Analysis> queryAnalysisPair =
+        this.analyzeQueryInLogicalViewStatement(analysis, queryStatement, context);
+      if (queryAnalysisPair.right.isFinishQueryAfterAnalyze()) {
+        return analysis;
+      } else if (queryAnalysisPair.left != null) {
+        alterLogicalViewStatement.setSourceExpressions(queryAnalysisPair.left);
+      }
+    }
+    analysis.setStatement(alterLogicalViewStatement);
+
+    // check target paths; check source expressions.
+    checkPathsInAlterLogicalView(analysis, alterLogicalViewStatement);
+    if (analysis.isFinishQueryAfterAnalyze()) {
+      return analysis;
+    }
+
+    // make sure there is no view in source
+    List<Expression> sourceExpressionList = alterLogicalViewStatement.getSourceExpressionList();
+    checkViewsInSource(analysis, sourceExpressionList, context);
+    if (analysis.isFinishQueryAfterAnalyze()) {
+      return analysis;
+    }
+
+    // TODO : CRTODO : shall we make sure targets are exists here?
+
+    // set schema partition info, this info will be used to split logical plan node.
+    PathPatternTree patternTree = new PathPatternTree();
+    for (PartialPath thisFullPath : alterLogicalViewStatement.getTargetPathList()) {
       patternTree.appendFullPath(thisFullPath);
     }
     SchemaPartition schemaPartitionInfo = partitionFetcher.getOrCreateSchemaPartition(patternTree);

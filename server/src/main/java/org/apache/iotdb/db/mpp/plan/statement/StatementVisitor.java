@@ -249,8 +249,7 @@ public abstract class StatementVisitor<R, C> {
   }
 
   // Alter Logical View
-  public R visitAlterLogicalView(
-    AlterLogicalViewStatement alterLogicalViewStatement, C context) {
+  public R visitAlterLogicalView(AlterLogicalViewStatement alterLogicalViewStatement, C context) {
     return visitStatement(alterLogicalViewStatement, context);
   }
 

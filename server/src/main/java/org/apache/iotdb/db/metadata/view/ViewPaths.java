@@ -23,10 +23,8 @@ import org.apache.iotdb.commons.path.PartialPath;
 import org.apache.iotdb.db.mpp.plan.expression.Expression;
 import org.apache.iotdb.db.mpp.plan.expression.leaf.TimeSeriesOperand;
 
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * A private class to save all paths' info in targetPaths and sourcePaths except query statement.
@@ -79,7 +77,7 @@ public class ViewPaths {
 
   public void generateExpressionsIfNecessary() {
     if (this.viewPathType == ViewPathType.FULL_PATH_LIST
-      || this.viewPathType == ViewPathType.PATHS_GROUP) {
+        || this.viewPathType == ViewPathType.PATHS_GROUP) {
       if (this.fullPathList != null) {
         this.expressionsList = new ArrayList<>();
         for (PartialPath path : this.fullPathList) {

@@ -213,7 +213,6 @@ import org.apache.iotdb.tsfile.read.common.TimeRange;
 
 import com.google.common.collect.ImmutableSet;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.apache.iotdb.tsfile.utils.Pair;
 
 import java.io.FileNotFoundException;
 import java.net.URI;
@@ -1055,8 +1054,8 @@ public class ASTVisitor extends IoTDBSqlParserBaseVisitor<Statement> {
   }
 
   private void parseViewTargetPaths(
-    IoTDBSqlParser.ViewTargetPathsContext ctx,
-    AlterLogicalViewStatement alterLogicalViewStatement) {
+      IoTDBSqlParser.ViewTargetPathsContext ctx,
+      AlterLogicalViewStatement alterLogicalViewStatement) {
     // full paths
     if (ctx.fullPath() != null && ctx.fullPath().size() > 0) {
       List<PartialPath> pathList = new ArrayList<>();
@@ -1067,8 +1066,8 @@ public class ASTVisitor extends IoTDBSqlParserBaseVisitor<Statement> {
     }
     // prefix path and suffix paths
     if (ctx.prefixPath() != null
-      && ctx.viewSuffixPaths() != null
-      && ctx.viewSuffixPaths().size() > 0) {
+        && ctx.viewSuffixPaths() != null
+        && ctx.viewSuffixPaths().size() > 0) {
       PartialPath prefixPath = parsePrefixPath(ctx.prefixPath());
       List<PartialPath> suffixPathList = new ArrayList<>();
       for (IoTDBSqlParser.ViewSuffixPathsContext suffixPathContext : ctx.viewSuffixPaths()) {
@@ -1110,8 +1109,8 @@ public class ASTVisitor extends IoTDBSqlParserBaseVisitor<Statement> {
   }
 
   private void parseViewSourcePaths(
-    IoTDBSqlParser.ViewSourcePathsContext ctx,
-    AlterLogicalViewStatement alterLogicalViewStatement) {
+      IoTDBSqlParser.ViewSourcePathsContext ctx,
+      AlterLogicalViewStatement alterLogicalViewStatement) {
     // full paths
     if (ctx.fullPath() != null && ctx.fullPath().size() > 0) {
       List<PartialPath> pathList = new ArrayList<>();
@@ -1122,8 +1121,8 @@ public class ASTVisitor extends IoTDBSqlParserBaseVisitor<Statement> {
     }
     // prefix path and suffix paths
     if (ctx.prefixPath() != null
-      && ctx.viewSuffixPaths() != null
-      && ctx.viewSuffixPaths().size() > 0) {
+        && ctx.viewSuffixPaths() != null
+        && ctx.viewSuffixPaths().size() > 0) {
       PartialPath prefixPath = parsePrefixPath(ctx.prefixPath());
       List<PartialPath> suffixPathList = new ArrayList<>();
       for (IoTDBSqlParser.ViewSuffixPathsContext suffixPathContext : ctx.viewSuffixPaths()) {
