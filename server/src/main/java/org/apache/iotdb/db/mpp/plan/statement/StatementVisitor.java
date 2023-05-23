@@ -32,6 +32,7 @@ import org.apache.iotdb.db.mpp.plan.statement.internal.InternalBatchActivateTemp
 import org.apache.iotdb.db.mpp.plan.statement.internal.InternalCreateMultiTimeSeriesStatement;
 import org.apache.iotdb.db.mpp.plan.statement.internal.InternalCreateTimeSeriesStatement;
 import org.apache.iotdb.db.mpp.plan.statement.internal.SchemaFetchStatement;
+import org.apache.iotdb.db.mpp.plan.statement.metadata.AlterLogicalViewStatement;
 import org.apache.iotdb.db.mpp.plan.statement.metadata.AlterTimeSeriesStatement;
 import org.apache.iotdb.db.mpp.plan.statement.metadata.CountDatabaseStatement;
 import org.apache.iotdb.db.mpp.plan.statement.metadata.CountDevicesStatement;
@@ -245,6 +246,12 @@ public abstract class StatementVisitor<R, C> {
   public R visitCreateLogicalView(
       CreateLogicalViewStatement createLogicalViewStatement, C context) {
     return visitStatement(createLogicalViewStatement, context);
+  }
+
+  // Alter Logical View
+  public R visitAlterLogicalView(
+    AlterLogicalViewStatement alterLogicalViewStatement, C context) {
+    return visitStatement(alterLogicalViewStatement, context);
   }
 
   // ML Model

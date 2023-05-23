@@ -169,4 +169,6 @@ public enum StatementType {
   SHOW_THROTTLE_QUOTA,
 
   CREATE_LOGICAL_VIEW,
+
+  ALTER_LOGICAL_VIEW,
 }

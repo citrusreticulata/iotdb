@@ -64,7 +64,7 @@ ddlStatement
     // Quota
     | setSpaceQuota | showSpaceQuota | setThrottleQuota | showThrottleQuota
     // View
-    | createLogicalView
+    | createLogicalView | alterLogicalView
     ;
 
 dmlStatement
@@ -576,6 +576,11 @@ viewSourcePaths
     : fullPath (COMMA fullPath)*
     | prefixPath LR_BRACKET viewSuffixPaths (COMMA viewSuffixPaths)* RR_BRACKET
     | selectClause fromClause
+    ;
+
+// Alter Logical View
+alterLogicalView
+    : ALTER VIEW viewTargetPaths AS viewSourcePaths
     ;
 
 /**

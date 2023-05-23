@@ -24,18 +24,15 @@ import org.apache.iotdb.commons.path.PartialPath;
 import org.apache.iotdb.db.metadata.view.ViewPathType;
 import org.apache.iotdb.db.metadata.view.ViewPaths;
 import org.apache.iotdb.db.mpp.plan.expression.Expression;
-import org.apache.iotdb.db.mpp.plan.expression.leaf.TimeSeriesOperand;
 import org.apache.iotdb.db.mpp.plan.statement.Statement;
 import org.apache.iotdb.db.mpp.plan.statement.StatementType;
 import org.apache.iotdb.db.mpp.plan.statement.StatementVisitor;
 import org.apache.iotdb.db.mpp.plan.statement.crud.QueryStatement;
 import org.apache.iotdb.tsfile.utils.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/** CREATE LOGICAL VIEW statement. */
-public class CreateLogicalViewStatement extends Statement {
+public class AlterLogicalViewStatement extends Statement {
 
   // the paths of this view
   private ViewPaths targetPaths;
@@ -44,12 +41,14 @@ public class CreateLogicalViewStatement extends Statement {
   private ViewPaths sourcePaths;
   private QueryStatement queryStatement;
 
-  public CreateLogicalViewStatement() {
+
+  public AlterLogicalViewStatement(){
     super();
-    this.statementType = StatementType.CREATE_LOGICAL_VIEW;
+    this.statementType = StatementType.ALTER_LOGICAL_VIEW;
     this.sourcePaths = new ViewPaths();
     this.targetPaths = new ViewPaths();
   }
+
 
   // region Interfaces about setting and getting
 
@@ -140,7 +139,7 @@ public class CreateLogicalViewStatement extends Statement {
    */
   public Pair<Boolean, Exception> checkSourcePathsIfNotUsingQueryStatement() {
     if (this.sourcePaths.viewPathType == ViewPathType.PATHS_GROUP
-        || this.sourcePaths.viewPathType == ViewPathType.FULL_PATH_LIST) {
+      || this.sourcePaths.viewPathType == ViewPathType.FULL_PATH_LIST) {
       for (PartialPath thisPath : this.sourcePaths.fullPathList) {
         if (thisPath.getNodeLength() < 3) {
           return new Pair<>(false, new IllegalPathException(thisPath.getFullPath()));
@@ -163,8 +162,9 @@ public class CreateLogicalViewStatement extends Statement {
 
   @Override
   public <R, C> R accept(StatementVisitor<R, C> visitor, C context) {
-    return visitor.visitCreateLogicalView(this, context);
+    return visitor.visitAlterLogicalView(this, context);
   }
 
   // endregion
+
 }
