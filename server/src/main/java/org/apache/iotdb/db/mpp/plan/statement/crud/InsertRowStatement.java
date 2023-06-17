@@ -353,7 +353,7 @@ public class InsertRowStatement extends InsertBaseStatement implements ISchemaVa
   }
 
   @Override
-  public void validateDeviceSchema(boolean isAligned) {
+  public void validateDeviceSchema(Boolean isAligned) {
     this.isAligned = isAligned;
   }
 
@@ -390,7 +390,7 @@ public class InsertRowStatement extends InsertBaseStatement implements ISchemaVa
 
   @Override
   public void validateMeasurementSchema(
-      int index, IMeasurementSchemaInfo measurementSchemaInfo, boolean isAligned) {
+      int index, IMeasurementSchemaInfo measurementSchemaInfo, Boolean isAligned) {
     this.validateMeasurementSchema(index, measurementSchemaInfo);
     if (this.measurementIsAligned == null) {
       this.measurementIsAligned = new boolean[this.measurements.length];

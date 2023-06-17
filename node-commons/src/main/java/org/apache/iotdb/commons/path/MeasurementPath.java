@@ -155,6 +155,10 @@ public class MeasurementPath extends PartialPath {
     return isUnderAlignedEntity;
   }
 
+  public Boolean isUnderAlignedEntityNullable() {
+    return isUnderAlignedEntity;
+  }
+
   public void setUnderAlignedEntity(Boolean underAlignedEntity) {
     isUnderAlignedEntity = underAlignedEntity;
   }

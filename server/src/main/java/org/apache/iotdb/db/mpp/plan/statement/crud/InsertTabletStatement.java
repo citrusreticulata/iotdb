@@ -65,7 +65,7 @@ public class InsertTabletStatement extends InsertBaseStatement implements ISchem
    * This param record whether the source of logical view is aligned. Only used when there are
    * views.
    */
-  private boolean[] measurementIsAligned;
+  private Boolean[] measurementIsAligned;
 
   public InsertTabletStatement() {
     super();
@@ -322,7 +322,7 @@ public class InsertTabletStatement extends InsertBaseStatement implements ISchem
   }
 
   @Override
-  public void validateDeviceSchema(boolean isAligned) {
+  public void validateDeviceSchema(Boolean isAligned) {
     this.isAligned = isAligned;
   }
 
@@ -356,10 +356,10 @@ public class InsertTabletStatement extends InsertBaseStatement implements ISchem
 
   @Override
   public void validateMeasurementSchema(
-      int index, IMeasurementSchemaInfo measurementSchemaInfo, boolean isAligned) {
+      int index, IMeasurementSchemaInfo measurementSchemaInfo, Boolean isAligned) {
     this.validateMeasurementSchema(index, measurementSchemaInfo);
     if (this.measurementIsAligned == null) {
-      this.measurementIsAligned = new boolean[this.measurements.length];
+      this.measurementIsAligned = new Boolean[this.measurements.length];
       Arrays.fill(this.measurementIsAligned, this.isAligned);
     }
     this.measurementIsAligned[index] = isAligned;

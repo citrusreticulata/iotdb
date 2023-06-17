@@ -37,7 +37,7 @@ public interface ISchemaComputation {
   String[] getMeasurements();
 
   /** @param isAligned whether the fetched device is aligned */
-  void computeDevice(boolean isAligned);
+  void computeDevice(Boolean isAligned);
 
   /**
    * @param index the index of fetched measurement in array returned by getMeasurements
@@ -77,6 +77,6 @@ public interface ISchemaComputation {
    * @param isAligned whether the source of this view is aligned.
    */
   void computeMeasurementOfView(
-      int index, IMeasurementSchemaInfo measurementSchemaInfo, boolean isAligned);
+      int index, IMeasurementSchemaInfo measurementSchemaInfo, Boolean isAligned);
   // endregion
 }

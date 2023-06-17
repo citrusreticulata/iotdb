@@ -206,7 +206,7 @@ public class DataNodeSchemaCache {
       PartialPath devicePath,
       String[] measurements,
       MeasurementSchema[] measurementSchemas,
-      boolean isAligned,
+      Boolean isAligned,
       Function<Integer, TimeValuePair> timeValuePairProvider,
       Function<Integer, Boolean> shouldUpdateProvider,
       boolean highPriorityUpdate,

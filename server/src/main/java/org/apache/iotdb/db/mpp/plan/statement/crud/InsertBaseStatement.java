@@ -49,7 +49,7 @@ public abstract class InsertBaseStatement extends Statement {
    */
   protected PartialPath devicePath;
 
-  protected boolean isAligned;
+  protected Boolean isAligned;
 
   protected MeasurementSchema[] measurementSchemas;
 
@@ -106,10 +106,17 @@ public abstract class InsertBaseStatement extends Statement {
   }
 
   public boolean isAligned() {
+    if (isAligned == null) {
+      return false;
+    }
     return isAligned;
   }
 
-  public void setAligned(boolean aligned) {
+  public Boolean isAlignedNullable() {
+    return isAligned;
+  }
+
+  public void setAligned(Boolean aligned) {
     isAligned = aligned;
   }
 

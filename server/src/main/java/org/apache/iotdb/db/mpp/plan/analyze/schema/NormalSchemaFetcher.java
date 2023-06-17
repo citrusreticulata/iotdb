@@ -168,7 +168,7 @@ class NormalSchemaFetcher {
       // existing device, throw exception.
       PartialPath devicePath = schemaComputationWithAutoCreation.getDevicePath();
       validateIsAlignedValueIfAutoCreate(
-          schemaComputationWithAutoCreation.isAligned(), isAlignedPutIn, devicePath);
+          schemaComputationWithAutoCreation.isAlignedNullable(), isAlignedPutIn, devicePath);
       ClusterSchemaTree schemaTree = new ClusterSchemaTree();
       autoCreateSchemaExecutor.autoCreateTimeSeries(
           schemaTree,
@@ -319,7 +319,7 @@ class NormalSchemaFetcher {
               .collect(Collectors.toList());
       List<Boolean> isAlignedRealList =
           schemaComputationWithAutoCreationList.stream()
-              .map(ISchemaComputationWithAutoCreation::isAligned)
+              .map(ISchemaComputationWithAutoCreation::isAlignedNullable)
               .collect(Collectors.toList());
       // Check the isAligned value. If the input value is different from the actual value of the
       // existing device, throw exception.

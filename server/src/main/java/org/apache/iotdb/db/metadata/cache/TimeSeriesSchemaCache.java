@@ -152,7 +152,7 @@ public class TimeSeriesSchemaCache {
               indexOfMissingMeasurements.add(index);
             } else {
               if (isFirstNonViewMeasurement.get() && (!value.isLogicalView())) {
-                schemaComputation.computeDevice(value.isAligned());
+                schemaComputation.computeDevice(value.isAlignedNullable());
                 isFirstNonViewMeasurement.getAndSet(false);
               }
               schemaComputation.computeMeasurement(index, value);
@@ -209,7 +209,7 @@ public class TimeSeriesSchemaCache {
                                   + "Please check it.",
                               fullPath)));
                 }
-                schemaComputation.computeMeasurementOfView(index, value, value.isAligned());
+                schemaComputation.computeMeasurementOfView(index, value, value.isAlignedNullable());
               }
             }
           });
@@ -232,7 +232,7 @@ public class TimeSeriesSchemaCache {
             storageGroup,
             measurementPath.getMeasurementSchema(),
             measurementPath.getTagMap(),
-            measurementPath.isUnderAlignedEntity());
+            measurementPath.isUnderAlignedEntityNullable());
     dualKeyCache.put(
         measurementPath.getDevicePath(), measurementPath.getMeasurement(), schemaCacheEntry);
   }
@@ -269,7 +269,7 @@ public class TimeSeriesSchemaCache {
       PartialPath devicePath,
       String[] measurements,
       MeasurementSchema[] measurementSchemas,
-      boolean isAligned,
+      Boolean isAligned,
       Function<Integer, TimeValuePair> timeValuePairProvider,
       Function<Integer, Boolean> shouldUpdateProvider,
       boolean highPriorityUpdate,
@@ -341,7 +341,7 @@ public class TimeSeriesSchemaCache {
                   storageGroup,
                   (MeasurementSchema) measurementPath.getMeasurementSchema(),
                   measurementPath.getTagMap(),
-                  measurementPath.isUnderAlignedEntity());
+                  measurementPath.isUnderAlignedEntityNullable());
           dualKeyCache.put(seriesPath.getDevicePath(), seriesPath.getMeasurement(), entry);
         }
       }

@@ -186,7 +186,7 @@ public class ClusterSchemaTree implements ISchemaTree {
       } else {
         if (firstNonViewMeasurement) {
           if (!node.getAsMeasurementNode().isLogicalView()) {
-            schemaComputation.computeDevice(cur.getAsEntityNode().isAligned());
+            schemaComputation.computeDevice(cur.getAsEntityNode().isAlignedNullable());
             firstNonViewMeasurement = false;
           }
         }
@@ -231,7 +231,7 @@ public class ClusterSchemaTree implements ISchemaTree {
             realIndex,
             new MeasurementSchemaInfo(
                 measurementPath.getMeasurement(), measurementPath.getMeasurementSchema(), null),
-            measurementPath.isUnderAlignedEntity());
+            measurementPath.isUnderAlignedEntityNullable());
       }
     }
   }

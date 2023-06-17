@@ -25,7 +25,7 @@ import org.apache.iotdb.db.mpp.common.schematree.IMeasurementSchemaInfo;
 public interface ISchemaValidation extends ISchemaComputationWithAutoCreation {
 
   @Override
-  default void computeDevice(boolean isAligned) {
+  default void computeDevice(Boolean isAligned) {
     validateDeviceSchema(isAligned);
   }
 
@@ -36,7 +36,7 @@ public interface ISchemaValidation extends ISchemaComputationWithAutoCreation {
 
   @Override
   default void computeMeasurementOfView(
-      int index, IMeasurementSchemaInfo measurementSchemaInfo, boolean isAligned) {
+      int index, IMeasurementSchemaInfo measurementSchemaInfo, Boolean isAligned) {
     validateMeasurementSchema(index, measurementSchemaInfo, isAligned);
   }
 
@@ -46,10 +46,10 @@ public interface ISchemaValidation extends ISchemaComputationWithAutoCreation {
    *
    * @param isAligned The real value of attribute <code>isAligned</code> of this device schema
    */
-  void validateDeviceSchema(boolean isAligned);
+  void validateDeviceSchema(Boolean isAligned);
 
   void validateMeasurementSchema(int index, IMeasurementSchemaInfo measurementSchemaInfo);
 
   void validateMeasurementSchema(
-      int index, IMeasurementSchemaInfo measurementSchemaInfo, boolean isAligned);
+      int index, IMeasurementSchemaInfo measurementSchemaInfo, Boolean isAligned);
 }

@@ -53,7 +53,7 @@ public abstract class InsertNode extends WritePlanNode implements ComparableCons
    */
   protected PartialPath devicePath;
 
-  protected boolean isAligned;
+  protected Boolean isAligned;
   protected MeasurementSchema[] measurementSchemas;
   protected String[] measurements;
   protected TSDataType[] dataTypes;
@@ -84,7 +84,7 @@ public abstract class InsertNode extends WritePlanNode implements ComparableCons
   protected InsertNode(
       PlanNodeId id,
       PartialPath devicePath,
-      boolean isAligned,
+      Boolean isAligned,
       String[] measurements,
       TSDataType[] dataTypes) {
     super(id);
@@ -111,10 +111,17 @@ public abstract class InsertNode extends WritePlanNode implements ComparableCons
   }
 
   public boolean isAligned() {
+    if (isAligned == null) {
+      return false;
+    }
     return isAligned;
   }
 
-  public void setAligned(boolean aligned) {
+  public Boolean isAlignedNullable() {
+    return isAligned;
+  }
+
+  public void setAligned(Boolean aligned) {
     isAligned = aligned;
   }
 

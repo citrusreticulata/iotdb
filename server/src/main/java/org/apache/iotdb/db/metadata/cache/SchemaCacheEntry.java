@@ -36,7 +36,7 @@ public class SchemaCacheEntry implements IMeasurementSchemaInfo {
   private final IMeasurementSchema iMeasurementSchema;
 
   private final Map<String, String> tagMap;
-  private final boolean isAligned;
+  private final Boolean isAligned;
 
   private volatile ILastCacheContainer lastCacheContainer = null;
 
@@ -44,7 +44,7 @@ public class SchemaCacheEntry implements IMeasurementSchemaInfo {
       String storageGroup,
       IMeasurementSchema iMeasurementSchema,
       Map<String, String> tagMap,
-      boolean isAligned) {
+      Boolean isAligned) {
     this.storageGroup = storageGroup.intern();
     this.iMeasurementSchema = iMeasurementSchema;
     this.isAligned = isAligned;
@@ -72,6 +72,13 @@ public class SchemaCacheEntry implements IMeasurementSchemaInfo {
   }
 
   public boolean isAligned() {
+    if (isAligned == null) {
+      return false;
+    }
+    return isAligned;
+  }
+
+  public Boolean isAlignedNullable() {
     return isAligned;
   }
 

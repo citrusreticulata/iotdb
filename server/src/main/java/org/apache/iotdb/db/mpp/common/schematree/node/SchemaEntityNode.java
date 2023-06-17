@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class SchemaEntityNode extends SchemaInternalNode {
 
-  private boolean isAligned;
+  private Boolean isAligned;
 
   private Map<String, SchemaMeasurementNode> aliasChildren;
 
@@ -54,10 +54,17 @@ public class SchemaEntityNode extends SchemaInternalNode {
   }
 
   public boolean isAligned() {
+    if (isAligned == null) {
+      return false;
+    }
     return isAligned;
   }
 
-  public void setAligned(boolean aligned) {
+  public Boolean isAlignedNullable() {
+    return isAligned;
+  }
+
+  public void setAligned(Boolean aligned) {
     isAligned = aligned;
   }
 

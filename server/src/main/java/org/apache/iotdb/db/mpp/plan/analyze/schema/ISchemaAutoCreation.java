@@ -36,6 +36,8 @@ public interface ISchemaAutoCreation {
 
   boolean isAligned();
 
+  Boolean isAlignedNullable();
+
   TSDataType getDataType(int index);
 
   TSEncoding getEncoding(int index);
